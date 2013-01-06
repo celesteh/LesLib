@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.46">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; min-height: 17.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
+p.p5 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica}
+p.p6 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica; min-height: 14.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 56.0px; text-indent: -56.0px; font: 12.0px Helvetica}
+p.p11 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Helvetica}
+p.p12 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Helvetica; min-height: 14.0px}
+p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #592e1f}
+p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco}
+p.p15 {margin: 0.0px 0.0px 0.0px 56.0px; text-indent: -56.0px; font: 12.0px Helvetica; min-height: 14.0px}
+p.p16 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p17 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 9.0px Monaco; color: #592e1f}
+p.p18 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 9.0px Monaco}
+p.p19 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 9.0px Monaco; color: #606060}
+span.s1 {font: 18.0px Helvetica}
+span.s2 {color: #23329e}
+span.s3 {font: 12.0px Helvetica}
+span.s4 {color: #000000}
+span.s5 {font: 9.0px Monaco}
+span.s6 {color: #5f6836}
+span.s7 {color: #606060}
+span.s8 {color: #0619b5}
+span.s9 {color: #0011ba}
+span.s10 {color: #426f1d}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>BufferTool<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b></span><b>holds additional information about buffers and manipulates them</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>superclass: Object</b></p>
+<p class="p2"><br></p>
+<p class="p1">This class acts as a wrapper for a <a href="../../ServerArchitecture/Buffer.html"><span class="s2">Buffer</span></a>.<span class="Apple-converted-space">  </span>Multiple instances can point at the same Buffer, so that one Buffer may have multiple BufferTools representing grains.</p>
+<p class="p3"><br></p>
+<p class="p4"><b>Accessing Instance Variables</b></p>
+<p class="p2"><br></p>
+<p class="p5">The following variables have getter methods.</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>server</b> - Returns the Buffer's <a href="Server.html"><span class="s2">Server</span></a> object.</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>bufnum</b> - Returns the buffer number of the corresponding server-side buffer. In normal use you should not need to access this value, since instances of Buffer can be used directly as UGen inputs or Synth args.</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>numFrames</b> - Returns the number of sample frames in the corresponding server-side buffer. Note that multichannel buffers interleave their samples, so when dealing with indices in methods like get and getn, the actual number of available values is numFrames * numChannels.</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>startFrame</b> -<span class="Apple-converted-space">  </span>Returns the start frame of this particular instance</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>endFrame</b> -<span class="Apple-converted-space">  </span>Returns the end frame of this particular instance</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>dur</b> -<span class="Apple-converted-space">  </span>Returns the duration of this particular instance, in seconds</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>numChannels</b> - Returns the number of channels in the corresponding server-side buffer.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>sampleRate</b> - Returns the sample rate of the corresponding server-side buffer.</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>buf</b> -<span class="Apple-converted-space">  </span>Returns the Buffer object associatied with this BufferTool</p>
+<p class="p6"><br></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>amp</b> -<span class="Apple-converted-space">  </span>Can be used to hold an amplitude for playback.<span class="Apple-converted-space">  </span>This is useful for when BufferTools from different buffers are together in a single array</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p5"><span class="Apple-tab-span">	</span><b>synthDefName</b> -<span class="Apple-converted-space">  </span>Can be used to hold an synthDef name for playback.<span class="Apple-converted-space">  </span>This is useful for when BufferTools from different buffers are together in a single array, especially if mono and stereo are mixed together.</p>
+<p class="p2"><br></p>
+<p class="p2"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>s.boot;</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = <span class="s2">BufferTool</span>.alloc(s,8.0,2);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.bufnum.postln;</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.free;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p4"><b>Creation with Immediate Memory Allocation</b></p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><br></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>*alloc(server, dur, numChannels, sampleRate, action, class)</b></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Create a Buffer, return a BufferTool and immediately allocate the required memory on the server. The buffer's values will be initialised to 0.0.</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>server<span class="Apple-converted-space"> </span></b> - The server on which to allocate the buffer. The default is the default <a href="Server.html"><span class="s2">Server</span></a>.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>dur </b>- The duration of the desired buffer</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>numChannels</b> - The number of channels for the Buffer. The default is 1.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>sampleRate</b> - The sample rate for the Buffer. The default is 44100.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>action </b>- A function to be evaluated after the allocation is completed.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>class</b> - The class to use when the bufer is allocated, in case you have a subclass of Buffer that you would like to use. This is useful for people using BBCutBuffers, for example. The default is Buffer.</p>
+<p class="p12"><span class="Apple-tab-span">	</span></p>
+<p class="p13"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Allocate 8 second stereo buffer</p>
+<p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>s.boot;</p>
+<p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = <span class="s2">BufferTool</span>.alloc(s, 8.0, 2);</p>
+<p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.free;</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p15"><br></p>
+<p class="p10"><span class="s5"><span class="Apple-tab-span">	</span></span><b>*open(server, path, action, class)</b></p>
+<p class="p6"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Allocate a buffer and immediately read a soundfile into it. This method sends a query message as a completion message so that the Buffer's instance variables will be updated automatically. <b>N.B.</b> You cannot rely on the buffer's instance variables being instantly updated, as there is a small amount of latency involved. <b>action</b> will be evaluated upon receipt of the reply to the query, so use this in cases where access to instance variables is needed.</p>
+<p class="p12"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>server<span class="Apple-converted-space"> </span></b> - The server on which to allocate the buffer.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>path</b> - A <b>String</b> representing the path of the soundfile to be read.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>action</b> - A <b>Function</b> to be evaluated once the file has been read and this Buffer's instance variables have been updated. The function will be passed this BufferTool as an argument.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>class</b> - The class to use when the bufer is read, in case you have a subclass of Buffer that you would like to use. This is useful for people using BBCutBuffers, for example. The default is Buffer.</p>
+<p class="p16"><span class="Apple-tab-span">	</span></p>
+<p class="p17"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// read a soundfile</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>s.boot;</p>
+<p class="p19"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = </span><span class="s2">BufferTool</span><span class="s4">.open(s, </span>"sounds/a11wlk01.wav"<span class="s4">);</span></p>
+<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p17"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// now play it</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = <span class="s2">SynthDef</span>(<span class="s6">\help_Buffer</span>, { <span class="s2">arg</span> out = 0, bufnum;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar( out,</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">PlayBuf</span>.ar(1, bufnum, <span class="s2">BufRateScale</span>.kr(bufnum))</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}).play(s,[<span class="s6">\bufnum</span>, b.bufnum]);</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.free; b.free;</p>
+<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p17"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// with an action function</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = <span class="s2">BufferTool</span>.open(s, <span class="s7">"sounds/a11wlk01.wav"</span>, action: { <span class="s2">arg</span> buffer;<span class="Apple-converted-space"> </span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(<span class="s7">"After update:"</span> + buffer.numFrames).postln;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = { <span class="s2">PlayBuf</span>.ar(1, buffer.bufnum, <span class="s2">BufRateScale</span>.kr(buffer.bufnum)) }.play;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.free; b.free;</p>
+<p class="p16"><br></p>
+<p class="p12"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b></p>
+<p class="p4"><b>Creation from an existing BufferTool or Buffer</b></p>
+<p class="p3"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>*grain(server, buffer, startFrame, endFrame, sampleRate, synthDefName, bufnum, bufamp class)</b></p>
+<p class="p16"><span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Create and return a new BufferTool object, from an existing Buffer or BufferTool.</p>
+<p class="p12"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>server<span class="Apple-converted-space"> </span></b> - The server on which to allocate the buffer. The default is the default <a href="Server.html"><span class="s2">Server</span></a>.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>buffer </b>- The frame number that the BufferTool starts on.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>startFrame </b>- The frame number that the BufferTool starts on. This can also be inferred from the buffer.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>endFrame </b>- The frame number that the BufferTool ends on. This can also be inferred from the buffer.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>sampleRate </b>- The sampleRate for the Buffer. This can also be inferred from the buffer.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>synthDefName </b>- A symbol for the synthdef that would be used with this BufferTool (see above).<span class="Apple-converted-space">  </span>This is optional.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bufnum</b> - The number of the bufnum of the associated buffer. This can also be inferred from the buffer.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bufamp</b> - An amplitude that might be used to play the buffer.<span class="Apple-converted-space">  </span>This is optinal.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>class</b> - The class of the buffer object. This may be useful to people using BBCutBuffers.<span class="Apple-converted-space">  </span>This defaults to Buffer.</p>
+<p class="p16"><span class="Apple-tab-span">	</span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>s.boot;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = <span class="s2">Buffer</span>.alloc(s, 44100 * 8.0, 2);</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c = <span class="s2">BufferTool</span>.grain(s, b);</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.query;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.buf.query;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.free; c.free;</p>
+<p class="p2"><span class="Apple-tab-span">	</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p4"><b>Non-Real Time Instance Methods</b></p>
+<p class="p2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>findPitch(threshold, action);</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A simple non-realtime method for finding the pitch of a BufferTool.<span class="Apple-converted-space">  </span>The result can be found in this BufferTool's instance variable <b>pitch</b>.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>threshold</b> - Amplitude threshold.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>action</b> - A <b>Function</b> to be evaluated once the pitch has been found and this BufferTool's instance variables have been updated. The function will be passed this BufferTool as an argument.<span class="Apple-converted-space">  </span>The pitch instance variable is set immeditately before the action is evaluated.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>s.boot;</p>
+<p class="p19"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = </span><span class="s2">BufferTool</span><span class="s4">.open(s, </span>"sounds/a11wlk01.wav"<span class="s4">);</span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.findPitch(action: {</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>("pitch is" + b.pitch).postln;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = {SinOsc.ar(b.pitch)}.play;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.free; b.free;</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>prepareWords(threshold, length, take_last, min, border_on_zero_crossing, action);</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A non-realtime algorythm for finding pauses in speech.<span class="Apple-converted-space">  </span>It works best in English.<span class="Apple-converted-space">  </span>This creates an array of BufferTools, (each pointing at the source Buffer) with startFrame, endFrame, etc all decribing individual words. This result can be found in this BufferTool's instance variable <b>grains</b>.<span class="Apple-converted-space">  </span>This method might also work with any sounds that have pauses.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>threshold</b> - The amplitude thehold for what is loud enough to be an utterance.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>length</b> - The number of frames of the shortest allowable pause between words.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>take_last </b>- A boolean which indicates if the end of the Buffer should be made into a grain or discarded.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>min</b> - The shortest allowable word or sound, in frames.<span class="Apple-converted-space">  </span>The deafault is 4410.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>border_on_zero_crossing </b>- A boolean which indicates if the borders of grains should fall on zero crossings.<span class="Apple-converted-space">  </span>If true, the border is the closest zero crossing before the sample reaches the threshold.<span class="Apple-converted-space">  </span>If false, the border is on the sample that is at or oever the threshold.<span class="Apple-converted-space">  </span>This defaults to false.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>action</b> - A <b>Function</b> to be evaluated once the grains have been found and this BufferTool's instance variables have been updated. The function will be passed this BufferTool as an argument.<span class="Apple-converted-space">  </span>The grains instance variable is set immeditately before the action is evaluated.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>s.boot;</p>
+<p class="p19"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = </span><span class="s8">BufferTool</span><span class="s4">.open(s, </span>"sounds/a11wlk01.wav"<span class="s4">);<span class="Apple-converted-space"> </span></span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">SynthDescLib</span>.global.read;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.prepareWords(0.3, 20000, <span class="s8">true</span>, action: {</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(<span class="s7">"number of words found:"</span> + b.grains.size).postln;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = <span class="s8">Synth</span>.new(b.synthDefName, args:</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s10">\bufbum</span>, b.bufnum,<span class="Apple-converted-space"> </span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s10">\startFrame</span>, b.grains[3].startFrame,</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s10">\grainDur</span>,<span class="Apple-tab-span">	</span>b.grains[3].dur]).play;</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p18"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.free; b.free;</p>
+<p class="p12"><br></p>
+<p class="p12"><span class="Apple-tab-span">	</span><b><span class="Apple-tab-span">	</span></b></p>
+<p class="p12"><br></p>
+<p class="p4"><b>Instance Methods</b></p>
+<p class="p2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_size(size, max_dur)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A method to create grains. Returns an array of BufferTools and sets this BufferTool's instance variable <b>grains</b> to hold the same array.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>size</b> - The size of each grain in samples.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>max_dur</b> - The total duration of the resultant array of grains. If set to nil, then the array is equal to the duration of this BufferTool.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_size_range(min, max, max_dur)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Create grains that very in size between in the min and the max.<span class="Apple-converted-space">  </span>Returns an array of BufferTools and sets this BufferTool's instance variable <b>grains</b> to hold the same array.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>min</b> - The smallest grain size, in samples.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>max </b>- The largest grain size in samples.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>max_dur</b> - The total duration of the resultant array of grains. If set to nil, then the array is equal to the duration of this BufferTool.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_dur(dur)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A method to create grains. Returns an array of BufferTools and sets this BufferTool's instance variable <b>grains</b> to hold the same array.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>dur</b> - The duration of each grain in seconds.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_dur_range(min_dur, max_dur)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Create grains that very in size between in the min and the max.<span class="Apple-converted-space">  </span>Returns an array of BufferTools and sets this BufferTool's instance variable <b>grains</b> to hold the same array.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>min_dur</b> - The smallest grain duration, in seconds.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>max_dur </b>- The largest grain duration in seconds.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_num(num, max_dur)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A method to create grains. Returns an array of BufferTools and sets this BufferTool's instance variable <b>grains</b> to hold the same array.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>num</b> - The number of grains to create.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>max_dur</b> - The total duration of the resultant array of grains. If set to nil, then the array is equal to the duration of this BufferTool.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>calc_grains_dur_arr(dur_arr, recurse)</b></p>
+<p class="p12"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A method to create grains. Sets this BufferTool's instance variable <b>grains</b> to hold the array of grains of the sizes described in the first argument.<span class="Apple-converted-space">  </span>Returns an array of subgrains.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>dur_arr</b> - An array of durations to use to create grains.<span class="Apple-converted-space">  </span>The method repeats the array durations until it granulates the entire BufferTool.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>recurse</b> - The number of equaly sized pieces to chop each grain into.<span class="Apple-converted-space">  </span>For example, 2 will chop each grain in half.<span class="Apple-converted-space">  </span>the method returns an array of all the smaller grains. To get the ones described by the dur_arr, either set this to one or look in the BufferTool's <b>grains</b> variable.</p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p11"><b><span class="Apple-tab-span">	</span>free(completionMessage)</b></p>
+<p class="p12"><span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Release the buffer's memory on the server and return the bufferID back to the server's buffer number allocator for future reuse.<span class="Apple-converted-space">  </span>Note that mulitple BufferTools may refer to the same buffer and do not call this unless you mean to quit using all of them.</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>completionMessage </b>- A valid OSC message or a <a href="../Core/Kernel/Function.html"><span class="s2">Function</span></a> which will return one. A Function will be passed the contained Buffer as an argument when evaluated.</p>
+<p class="p12"><br></p>
+</body>
+</html>
