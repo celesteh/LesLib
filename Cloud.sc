@@ -1,7 +1,16 @@
 GrainPicCloud {
 
+
+	// in this file:
+
+	// change the cursour so it also usies a mapping thing that looks at the current width of the canvas
+	// so it also has a .input thing that holds the percent t the end its at
+
+
+
+
 	var <>edgePoints, <boundingRect, <inside, <>settings, <>dur, <>page, pauseRatio, playRatio,
-		lowPitchRatio, hiPitchRatio, <>high, <>low, isPlaying, <>x, <>colour;
+		lowPitchRatio, hiPitchRatio, <>high, <>low, laylaying, <>x, <>colour, <isPlaying;
 
 
 	*initClass {
@@ -390,7 +399,7 @@ GrainPicCloud {
 
 GrainPicCursor {
 
-	var <startTime, >offset, >duration, >distance;
+	var <startTime, >offset, >duration, >distance, input;
 
 	*new { arg offset = 0, dur = 0, dist = 0;
 
@@ -454,16 +463,17 @@ GrainPicCursor {
 
 GrainPicController {  //make this a GUI object to handle gui stuff
 
-	var <hiPitch, <lowPitch, <>playAction, <>stopAction, <>dbAction, <duration, editSelect, >callMode, <db;
+	var <hiPitch, <lowPitch, <>playAction, <>stopAction, <>dbAction, <duration, editSelect, >callMode, <db,
+	controlWindow, <>growAction;
 
 	*new { arg playfunc, stopfunc;
-		^super.new.init(playfunc);
+		^super.new.init(playfunc, stopfunc);
 	}
 
 
 	init { arg playfunc, stopfunc;
 
-		var playButton, stopButton, freqRange, vertOffset, horOffset, controlWindow;
+		var playButton, stopButton, freqRange, vertOffset, horOffset, growButton;
 
 		vertOffset = 20;
 		horOffset = 20;
@@ -475,7 +485,8 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 		controlWindow = Window.new("Control Window");
 		playButton = Button(controlWindow, Rect(20, vertOffset, 50, 20));
 		stopButton = Button(controlWindow, Rect(90, vertOffset, 50, 20));
-		editSelect = PopUpMenu(controlWindow, Rect(160, vertOffset, 120, 20));
+		growButton = Button(controlWindow, Rect(160, vertOffset, 50, 20));
+		editSelect = PopUpMenu(controlWindow, Rect(230, vertOffset, 100, 20));
 		vertOffset = vertOffset + 40;
 		hiPitch = CV(\widefreq, 2000);
 		lowPitch = CV(\widefreq, 300);
@@ -510,6 +521,7 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 
 		playButton.states = [["[ > ]"]]; //, ["[ || ]"]];
 		stopButton.states = [["[ [] ]"]];
+		growButton.states=[["<-->"]];
 
 		playButton.action = { arg state;
 			playAction.notNil.if({
@@ -523,6 +535,11 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 			});
 		};
 
+		growButton.action = {
+			growAction.notNil.if({
+				growAction.value();
+			});
+		};
 
 		editSelect.items = ["Draw", "-", "Edit Single", "Select", "Cut (", "Copy (", "Paste ("];
 		editSelect.background_(Color.white);
@@ -564,9 +581,17 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 			});
 		};
 
+	controlWindow.view.addAction({ |view, char, modifiers, unicode, keycode, key|
+
+			(key == 0x20).if ({ // space
+				playAction.value(true);
+			});
+		}, \keyDownAction);
+
 		controlWindow.bounds_(Rect(0, 0, 350, vertOffset));
 
 		controlWindow.front;
+		controlWindow.alwaysOnTop = true;
 
 	}
 
@@ -601,6 +626,29 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 		});
 	}
 
+	front {
+
+		controlWindow.front;
+	}
+
+	dur {
+
+		duration.value;
+	}
+
+	dur_ {|dur|
+
+		duration.value = dur;
+	}
+
+	alertGrow { |change|
+
+		// change = oldWidth / toAdd;
+		// toAdd * change = oldWidth;
+		// toAdd = oldWith / change;
+		duration.spec.maxval = duration.spec.maxval + (duration.spec.maxval / change);
+	}
+
 }
 
 
@@ -615,16 +663,20 @@ GrainPicScribble {
 	 	>hiPitch, <>lowPitch, >duration, control, editMode, cursor,		selectRect, player,
 	<defaultSettings, active_default,
 	<playAction, <stopAction, dbAction, semaphore,
-	cloudListeners;
+	cloudListeners,
+	keyboardListeners;
 
 
-	*new { arg scribbleSize = Rect(40,40,1000,600), defaultCloudSettings, projectorMode = false;
+	*new { arg scribbleSize = /*Rect(40,40,1000,600)*/Rect.newSides(Window.availableBounds.left, Window.availableBounds.top,
+		Window.availableBounds.right, Window.availableBounds.bottom -20), defaultCloudSettings, projectorMode = false;
 
 			^super.new.init(scribbleSize, defaultCloudSettings, projectorMode);
 	}
 
 
-	init { arg scribbleSize = Rect(40,40,1000,600), defaultCloudSettings, projectorMode;
+	init { arg scribbleSize = /*Rect(40,40,1000,600)*/Window.availableBounds, defaultCloudSettings, projectorMode;
+
+		var scroller;
 
 		bounds = scribbleSize;
 		defaultCloudSettings.isKindOf(Function).if({
@@ -635,23 +687,33 @@ GrainPicScribble {
 			defaultSettings = defaultCloudSettings;
 		});
 
-		window = Window.new("GrainPic", Rect.newSides(bounds.left, bounds.top,
-					bounds.right + 80, bounds.bottom + 80));
+		window = Window.new("GrainPic", //Rect.newSides(bounds.left, bounds.top,
+					//bounds.right/* + 80*/, bounds.bottom/* + 80*/)
+			bounds, scroll:true);
 
-		tablet = View.new(window, bounds);
+		//tablet = View.new(window, bounds);
+		//scroller = ScrollView(window, bounds);
+		tablet = UserView(/*scroller*/window, bounds);
 
 		invert = projectorMode;
 
 		invert.if({
 			window.view.background_(Color.black);
+			//scroller.background = Color.black;
 		}, {
 			window.view.background_(Color.white);
+			//scroller.background = Color.white;
 		});
 		tablet.background = Color.clear;
 
 
 		points = [];
 		window.front;
+
+		projectorMode.if({
+			window.fullScreen;
+		});
+
 		clouds = Environment.new;
 		cloudListeners = [];
 		drawMode = true;
@@ -659,7 +721,7 @@ GrainPicScribble {
 		drawing = false;
 
 
-		window.drawFunc = {
+		window.drawFunc = { //was window
 
 			var cx, colour;
 
@@ -686,13 +748,13 @@ GrainPicScribble {
 
 			if (cursor.notNil && player.notNil, {
 
-				cx = cursor.getX;
+				cx = cursor.getX(/*dist: tablet.bounds.width*/);
 
 				Color.red.set;
 				Pen.beginPath;
 				Pen.moveTo(Point(cx, bounds.top));
-				Pen.lineTo(Point(cx - 7, bounds.top -10));
-				Pen.lineTo(Point(cx + 7, bounds.top - 10));
+				Pen.lineTo(Point(cx - 7, bounds.top /*-10*/-20));
+				Pen.lineTo(Point(cx + 7, bounds.top /*- 10*/-20));
 				Pen.lineTo(Point(cx, bounds.top));
 
 				Pen.fill;
@@ -815,6 +877,42 @@ GrainPicScribble {
 				editMode = ed;});
 		};
 
+		control.growAction = {
+			//"grow".postln;
+			this.grow();
+		};
+
+
+		keyboardListeners = [
+			{|char, modifiers, unicode, keycode, key|
+
+				(key == 0x20).if ({ // space
+					control.front;
+					//this.play;
+				});
+			}
+		];
+
+		window.view.addAction({ |view, char, modifiers, unicode, keycode, key|
+
+			keyboardListeners.do({ |listener|
+
+				listener.isKindOf(Function).if({
+					"function".postln;
+					listener.value(char, modifiers, unicode, keycode, key);
+				}, /*{
+					listener.respondsTo('keyDownAction').if({
+						listener.keyDownAction(view, char, modifiers, unicode, keycode, key);
+					} , else {
+						listener.respondsTo('action').if({
+							listener.action(char, modifiers, unicode, keycode, key);
+						})
+					})
+				}*/);
+			});
+		}, \keyDownAction);
+
+
 
 		this.playAction = {};
 
@@ -860,6 +958,22 @@ GrainPicScribble {
 		});
 	}
 
+	addKeyboardListener {|listener|
+
+		keyboardListeners.isNil.if({
+			keyboardListeners = [listener]
+		} , {
+			keyboardListeners = keyboardListeners ++ listener;
+		});
+	}
+
+	removeKeyboardListener { |listener|
+		keyboardListeners.notNil.if({
+			keyboardListeners.remove(listener);
+		})
+	}
+
+
 
 	playAction_ { arg func;
 
@@ -875,6 +989,28 @@ GrainPicScribble {
 	dbAction { ^control.dbAction }
 	dbAction_{ arg func;
 		control.dbAction = func
+	}
+
+
+	grow { arg percent = 0.25;
+		// percent of visible screen, not percent of whole
+		var oldWidth, toAdd, newWidth, height, change;
+
+		toAdd = (Window.availableBounds.width /*left - Window.availableBounds.right*/).abs * percent;
+		oldWidth = (tablet.bounds.left - tablet.bounds.right).abs;
+		newWidth = (oldWidth + toAdd).floor;
+		change = oldWidth / toAdd;
+
+		control.alertGrow(change);
+
+		height = bounds.height; //(window.bounds.top - window.bounds.bottom).abs.floor;
+
+		//("new size %\n").postf(newWidth);
+		window.setInnerExtent(newWidth, height);
+		tablet.resizeTo(newWidth, height);
+		//cursor.distance = newWidth;
+
+		^change;
 	}
 
 
@@ -978,8 +1114,8 @@ GrainPicScribble {
 			player = player.play; // change to manage stopping
 				//Task.new({
 			*/
-			dist = bounds.right - bounds.left;
-			cursor = GrainPicCursor(bounds.left, duration.value, dist);
+			dist = tablet.bounds.right - tablet.bounds.left;
+			cursor = GrainPicCursor(bounds.left, duration.value, dist.abs);
 
 			player = Pbind(\quant, 0,
 				\freq, Pfunc({
