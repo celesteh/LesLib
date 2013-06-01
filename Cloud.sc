@@ -500,7 +500,7 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 		hiPitch.connect(NumberBox(controlWindow, Rect(280, vertOffset, 50, 20)));
 		vertOffset = vertOffset + 40;
 
-		duration = CV.new.sp(60, 1, 600, 0);
+		duration = CV.new.sp(60, 1, 1200, 0);
 		StaticText(controlWindow, Rect(20, vertOffset, 50, 20)).string_("dur");
 		//SCSlider(controlWindow, Rect( 70, vertOffset, 150, 20)).connect(duration);
 		duration.connect(Slider(controlWindow, Rect( 70, vertOffset, 150, 20)));
@@ -663,8 +663,8 @@ GrainPicScribble {
 	 	>hiPitch, <>lowPitch, >duration, control, editMode, cursor,		selectRect, player,
 	<defaultSettings, active_default,
 	<playAction, <stopAction, dbAction, semaphore,
-	cloudListeners,
-	keyboardListeners;
+	cloudListeners, keyboardListeners,
+	<distance;
 
 
 	*new { arg scribbleSize = /*Rect(40,40,1000,600)*/Rect.newSides(Window.availableBounds.left, Window.availableBounds.top,
@@ -694,6 +694,7 @@ GrainPicScribble {
 		//tablet = View.new(window, bounds);
 		//scroller = ScrollView(window, bounds);
 		tablet = UserView(/*scroller*/window, bounds);
+		distance = (tablet.bounds.left - tablet.bounds.right).abs;
 
 		invert = projectorMode;
 
@@ -752,10 +753,10 @@ GrainPicScribble {
 
 				Color.red.set;
 				Pen.beginPath;
-				Pen.moveTo(Point(cx, bounds.top));
-				Pen.lineTo(Point(cx - 7, bounds.top /*-10*/-20));
-				Pen.lineTo(Point(cx + 7, bounds.top /*- 10*/-20));
-				Pen.lineTo(Point(cx, bounds.top));
+				Pen.moveTo(Point(cx, bounds.top+20));
+				Pen.lineTo(Point(cx - 7, bounds.top /*-10*/));
+				Pen.lineTo(Point(cx + 7, bounds.top /*- 10*/));
+				Pen.lineTo(Point(cx, bounds.top+20));
 
 				Pen.fill;
 				Pen.stroke;
@@ -1008,6 +1009,7 @@ GrainPicScribble {
 		//("new size %\n").postf(newWidth);
 		window.setInnerExtent(newWidth, height);
 		tablet.resizeTo(newWidth, height);
+		distance = newWidth;
 		//cursor.distance = newWidth;
 
 		^change;
@@ -1114,15 +1116,15 @@ GrainPicScribble {
 			player = player.play; // change to manage stopping
 				//Task.new({
 			*/
-			dist = tablet.bounds.right - tablet.bounds.left;
-			cursor = GrainPicCursor(bounds.left, duration.value, dist.abs);
+			//dist = tablet.bounds.right - tablet.bounds.left;
+			cursor = GrainPicCursor(bounds.left, duration.value, distance);
 
 			player = Pbind(\quant, 0,
 				\freq, Pfunc({
 					var x;
 
 					cursor.notNil.if({
-						x = cursor.getX(duration.value, dist);
+					x = cursor.getX(duration.value, distance);
 						//x.postln;
 						clouds.values.do({arg shape;
 							shape.cursor(x);
@@ -1130,7 +1132,7 @@ GrainPicScribble {
 						\rest
 					}, { nil })
 				}),
-				\dur, Pfunc({(duration.value / dist) / 2}),
+				\dur, Pfunc({(duration.value / distance) / 2}),
 				\cursor, Pfunc({cursor}) // stop when the cursor is nil
 			);
 			player.play;
@@ -1142,7 +1144,7 @@ GrainPicScribble {
 
 
 				//cursor = GrainPicCursor(rect.left, duration.value, dist);
-				(duration.value / dist).wait;
+				(duration.value / distance).wait;
 
 				//(dist).do({
 				{ if(cursor.notNil, {
@@ -1152,7 +1154,7 @@ GrainPicScribble {
 					if (cursor.notNil, {
 									//cursor = cursor +1;
 						window.refresh;
-						(duration.value / dist).wait;
+						(duration.value / distance).wait;
 					});
 
 				});
