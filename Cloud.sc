@@ -488,8 +488,8 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 		growButton = Button(controlWindow, Rect(160, vertOffset, 50, 20));
 		editSelect = PopUpMenu(controlWindow, Rect(230, vertOffset, 100, 20));
 		vertOffset = vertOffset + 40;
-		hiPitch = CV(\widefreq, 2000);
-		lowPitch = CV(\widefreq, 300);
+		hiPitch = CV(\freq, 2000);
+		lowPitch = CV(\freq, 50);//OTHERMINDS
 
 		StaticText(controlWindow, Rect(20, vertOffset, 50, 20)).string_("freq");
 		//RangeSlider(controlWindow, Rect(70, vertOffset, 150, 20)).connect([lowPitch, hiPitch]);
@@ -643,10 +643,16 @@ GrainPicController {  //make this a GUI object to handle gui stuff
 
 	alertGrow { |change|
 
+		var unmapped;
 		// change = oldWidth / toAdd;
 		// toAdd * change = oldWidth;
 		// toAdd = oldWith / change;
+		unmapped = duration.spec.unmap(duration.value);
 		duration.spec.maxval = duration.spec.maxval + (duration.spec.maxval / change);
+		duration.input = unmapped;
+		duration.spec.maxval.post; " ".post; duration.value.postln;
+		AppClock.sched(0, { controlWindow.refresh; nil });
+
 	}
 
 }
@@ -925,6 +931,15 @@ GrainPicScribble {
 
 	}
 
+
+	setDuration { |dur|
+
+		control.dur=dur;
+		duration = dur;
+	}
+
+
+
 	defaultSettings_ { arg settings;
 
 		settings.isKindOf(Function).if({
@@ -1010,7 +1025,9 @@ GrainPicScribble {
 		window.setInnerExtent(newWidth, height);
 		tablet.resizeTo(newWidth, height);
 		distance = newWidth;
-		//cursor.distance = newWidth;
+		////
+		cursor.distance = newWidth;
+		cursor.duration = control.duration;
 
 		^change;
 	}
@@ -1117,14 +1134,14 @@ GrainPicScribble {
 				//Task.new({
 			*/
 			//dist = tablet.bounds.right - tablet.bounds.left;
-			cursor = GrainPicCursor(bounds.left, duration.value, distance);
+			cursor = GrainPicCursor(bounds.left, control.duration.value, distance);
 
 			player = Pbind(\quant, 0,
 				\freq, Pfunc({
 					var x;
 
 					cursor.notNil.if({
-					x = cursor.getX(duration.value, distance);
+					x = cursor.getX(control.duration.value, distance);
 						//x.postln;
 						clouds.values.do({arg shape;
 							shape.cursor(x);
@@ -1144,17 +1161,17 @@ GrainPicScribble {
 
 
 				//cursor = GrainPicCursor(rect.left, duration.value, dist);
-				(duration.value / distance).wait;
+				(control.duration.value / distance).wait;
 
 				//(dist).do({
 				{ if(cursor.notNil, {
-					cursor.timeRunning <= duration.value;
+					cursor.timeRunning <= control.duration.value;
 					}, { false; });
 				}. while({
 					if (cursor.notNil, {
 									//cursor = cursor +1;
 						window.refresh;
-						(duration.value / distance).wait;
+						(control.duration.value / distance).wait;
 					});
 
 				});
@@ -1234,7 +1251,7 @@ GrainPicScribble {
 		// make sure not to overwrite last set of points incase we're drawning
 		points = points.addFirst(pointArr);
 
-		cl = GrainPicCloud.new(pointArr, bounds, duration,
+		cl = GrainPicCloud.new(pointArr, bounds, control.duration,
 										hiPitch, lowPitch);
 
 		//if (defaultSettings.notNil, {
