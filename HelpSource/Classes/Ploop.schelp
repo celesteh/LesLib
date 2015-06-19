@@ -1,0 +1,68 @@
+TITLE:: Ploop
+summary:: sequentially embed values in a list with callback on loop
+categories:: Streams-Patterns-Events>Patterns>List
+related:: Classes/Pseq, Classes/Pser
+
+DESCRIPTION::
+
+Cycles over a list of values. The repeats variable gives the number of times to repeat the entire list. The callback variable gives a callback function evaluated between repeats. It must return an array.
+
+
+
+
+EXAMPLES::
+
+code::
+a = [1];
+b = {|a| a = a.add(a.last + 1)}; // add to the array on every repeat
+Pbind(
+	\degree, Ploop(a, inf, 0, b)
+).play
+::
+
+The callback variable must return an array
+
+Change the callback while the loop is running:
+code::
+a = [1];
+b = {|a| a = a.add(a.last + 1)}; // add to the array on every repeat
+Pbind(
+	\degree, c=Ploop(a, inf, 0, b)
+).play;
+// Wait a moment and run the next lines one by one
+b = {|a| a.pop; a}; c.callback = b;
+//
+c.callback = nil; // no callback makes this behave just like a Pseq
+//
+b = { nil }; c.callback = b; // b does not return an array!
+::
+
+If the function returns nil, the Ploop will stop.  
+
+If it returns anything other than nil or an array, the behaviour is undefined and bad or unexpected things may happen.
+
+
+It is possible to make other changes to the array while the Ploop is running, but changes that effect the array length are likely to fail.
+code::
+(
+a = [1];
+c = 0;
+b = {|a|
+    if( c % 4 == 0, { 
+        a = a.add(a.last + 1);
+    });
+    c = c + 1;
+    a.postln;
+    a;
+};
+ 
+Pbind(
+	\degree, Ploop(a, inf, 0, b)
+).play
+)
+// run these lines individually
+a[0] = 10;
+//
+a = a.add(1); // run a few times
+::
+
