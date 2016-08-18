@@ -1,8 +1,10 @@
 Ploop : ListPattern {
 	var <>offset;
 	var <>callback;
-	*new { arg list, repeats=1, offset=0, callback;
-		^super.new(list, repeats).offset_(offset).callback_(callback)
+	var <>everyNloops;
+	var <>everyNsteps;
+	*new { arg list, repeats=1, offset=0, callback, everyNloops=1, everyNsteps;
+		^super.new(list, repeats).offset_(offset).callback_(callback).everyNloops_(everyNloops).everyNsteps(everyNsteps)
 	}
 	embedInStream {  arg inval;
 		var item, offsetValue;

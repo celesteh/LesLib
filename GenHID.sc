@@ -1,3 +1,4 @@
+/*
 +GeneralHIDDevice {
 
 	spec_ { arg deviceSpec;
@@ -7,3 +8,4 @@
 			spec = deviceSpec});
 	}
  }
+*/
